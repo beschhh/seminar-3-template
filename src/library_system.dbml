@@ -1,0 +1,64 @@
+Table Reader {
+  ReaderNumber integer [primary key]
+  FirstName varchar
+  LastName varchar
+  Address varchar
+  Birthday date
+}
+
+Table Publisher {
+  Name varchar [primary key]
+  Address varchar
+}
+
+Table Category {
+  CategoryName varchar [primary key]
+  ParentCategory varchar
+}
+
+Table Book {
+  ISBN varchar [primary key]
+  Title varchar
+  Year integer
+  Author varchar
+  Number_of_pages integer
+  PublisherName varchar [not null]
+}
+
+Table Copy {
+  ISBN varchar [not null]
+  CopyNumber integer [not null]
+  Position varchar
+
+  indexes {
+    (ISBN, CopyNumber) [pk]
+  }
+}
+
+Table BookCategory {
+  ISBN varchar
+  CategoryName varchar
+
+  indexes {
+    (ISBN, CategoryName) [pk]
+  }
+}
+
+Table Borrows {
+  ReaderNumber integer
+  ISBN varchar
+  CopyNumber integer
+  ReturnDate date
+
+  indexes {
+    (ReaderNumber, ISBN, CopyNumber) [pk]
+  }
+}
+
+Ref: Borrows.(ISBN, CopyNumber) > Copy.(ISBN, CopyNumber)
+Ref: Category.ParentCategory > Category.CategoryName
+Ref: Book.PublisherName > Publisher.Name
+Ref: Copy.ISBN > Book.ISBN
+Ref: BookCategory.ISBN > Book.ISBN
+Ref: BookCategory.CategoryName > Category.CategoryName
+Ref: Borrows.ReaderNumber > Reader.ReaderNumber
